@@ -18,7 +18,7 @@ class TripletLoss(nn.Module):
         self.batch_size=x.size()[0]
         self.feature_size=x.size()[1]
         triplet_loss=torch.tensor(0.0).to(self.device)
-        semihard_triplet_loss=torch.tensor(0.0).to(self.device)
+        # semihard_triplet_loss=torch.tensor(0.0).to(self.device)
         #start=time.clock()
         labels_=labels.cpu().data.numpy()
         triplets=[]
@@ -36,6 +36,8 @@ class TripletLoss(nn.Module):
             triplets+=temp
             #end=time.clock()
         #print ("triplets mining time: %s Seconds"%(end-start))
+
+        #上面是得到了所有的triplet三元组，下面是计算triplet loss
         if triplets:
             triplets=np.array(triplets)
             #print triplets
@@ -43,11 +45,11 @@ class TripletLoss(nn.Module):
             sq_an=(x[triplets[:, 0]]-x[triplets[:, 2]]).pow(2).sum(1)  
             losses=F.relu(self.margin+sq_ap-sq_an)
             triplet_count=torch.tensor(losses.size()[0]).float().to(self.device)
-            semihard_triplet_count=(losses!=0).sum().float().to(self.device)
+            # semihard_triplet_count=(losses!=0).sum().float().to(self.device)
             if triplet_count>0:
                 triplet_loss=losses.sum()/triplet_count
-            if semihard_triplet_count>0:
-                semihard_triplet_loss=losses.sum()/semihard_triplet_count
+            # if semihard_triplet_count>0:
+            #     semihard_triplet_loss=losses.sum()/semihard_triplet_count
             # print ("triplet_count", triplet_count)
             # print ("semihard_triplet_count", semihard_triplet_count)
             # print ("triplet_loss:",triplet_loss.item())

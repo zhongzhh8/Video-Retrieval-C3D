@@ -1,20 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d99581ba-7f48-4cf0-b99d-9361cc102ff6" name="Default Changelist" comment="" />
+    <list default="true" id="d99581ba-7f48-4cf0-b99d-9361cc102ff6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DataProcess/HDMB_label_split.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/all_keyframes.tar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backbone_3dresnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/backbone_3dresnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Ambiguous_val.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/readme.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/th14/db.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/th14/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/th14/val.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/th14/video2frame.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ucf101/test1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ucf101/test1_20.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ucf101/train1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ucf101/train1_20.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hash_layer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/max_entropy_loss.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quantization_loss.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temporal_attention.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_long.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_short.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_long.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_short.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/triplet_loss.py" beforeDir="false" afterPath="$PROJECT_DIR$/triplet_loss.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tt.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/video2frames.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataProcess/video2frames.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1PtlIjScpvA7CXGx2MlhJt26DVN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../image_retrieval_mine" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PycharmProjects1\video_retrieval_C3D\DataProcess" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PycharmProjects1\video_retrieval_C3D" />
+      <recent name="D:\PycharmProjects1\video_retrieval_C3D\pretrain" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -28,6 +89,56 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="Python.train">
+    <configuration name="HDMB_label_split" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="video_src0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="sftp://zhongzhanhui@172.18.216.105:22222/home/zhongzhanhui/anaconda3/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/DataProcess" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DataProcess/HDMB_label_split.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="video_src0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="sftp://zhongzhanhui@172.18.216.105:22222/home/zhongzhanhui/anaconda3/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.train" />
+      <item itemvalue="Python.HDMB_label_split" />
+    </list>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -39,10 +150,26 @@
       <option name="presentableId" value="Default" />
       <updated>1566701195750</updated>
       <workItem from="1566701197089" duration="951000" />
+      <workItem from="1566702311441" duration="54341000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/video_retrieval_C3D$train.coverage" NAME="train Coverage Results" MODIFIED="1566832052228" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/video_retrieval_C3D$HDMB_label_split.coverage" NAME="HDMB_label_split Coverage Results" MODIFIED="1566831773828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DataProcess" />
   </component>
 </project>

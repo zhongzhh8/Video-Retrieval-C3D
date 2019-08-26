@@ -100,7 +100,7 @@ class Bottleneck(nn.Module):
 
 class ResNet(nn.Module):
 
-    def __init__(self, block, layers, shortcut_type='A'): #A
+    def __init__(self, block, layers, shortcut_type='A'): #A   layers=[2,2,2,2]
         self.inplanes = 64
         super(ResNet, self).__init__()
         self.conv1 = nn.Conv3d(3, 64, kernel_size=7, stride=(1, 2, 2),
