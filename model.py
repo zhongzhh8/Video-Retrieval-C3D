@@ -213,20 +213,48 @@ class TemporalAvgPool(nn.Module):
 
 
 class HashLayer(nn.Module):
-    def __init__(self,hash_length,num_class):
+    def __init__(self,hash_length):
         super(HashLayer, self).__init__()
         self.hashcoder=nn.Sequential(nn.Linear(512,hash_length), nn.Tanh())
-        self.classifier=nn.Linear(512,num_class)
 
     def forward(self,x):
         if x.size()==5:
             x=x.view()
         h=self.hashcoder(x)
-        c=self.classifier(x)
-        return h, c
+        return h
 
-# def C3D_Hash_Model(**kwargs):
-#     """Constructs a ResNet-18 model.
-#     """
-#     model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
-#     return model
+
+
+def load_state(model, model_path):
+    model_dict = model.state_dict()
+    pretrained_dict = torch.load(model_path, map_location="cpu")["state_dict"]
+    key = list(pretrained_dict.keys())[0]
+    # 1. filter out unnecessary keys
+    # 1.1 multi-GPU ->CPU
+    if (str(key).startswith("module.")):
+        pretrained_dict = {k[7:]: v for k, v in pretrained_dict.items() if
+                           k[7:] in model_dict and v.size() == model_dict[k[7:]].size()}
+    else:
+        pretrained_dict = {k: v for k, v in pretrained_dict.items() if
+                           k in model_dict and v.size() == model_dict[k].size()}
+    # 2. overwrite entries in the existing state dict
+    model_dict.update(pretrained_dict)
+    # 3. load the new state dict
+    model.load_state_dict(model_dict)
+
+
+class C3D_Hash_Model(nn.Module):
+    """Constructs a (ResNet-18+Avg Pooling+Hashing ) model.
+    """
+    def __init__(self, hash_length):
+        super(C3D_Hash_Model, self).__init__()
+        self.resnet=resnet18()
+        load_state(self.resnet, "./pretrain/resnet-18-kinetics.pth")  # 加载保存好的模型
+        self.avg_pooling=TemporalAvgPool()
+        self.hash_layer =HashLayer(hash_length)
+
+    def forward(self, x):
+        resnet_feature=self.resnet(x)
+        avg_feature=self.avg_pooling(resnet_feature)
+        hash_feature=self.hash_layer(avg_feature)
+        return hash_feature

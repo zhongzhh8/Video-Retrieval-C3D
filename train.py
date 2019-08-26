@@ -5,6 +5,7 @@ from data_loader import CustomDataset
 from model import resnet18
 from model import TemporalAvgPool
 from model import HashLayer
+from model import C3D_Hash_Model
 from triplet_loss import TripletLoss
 import time
 import os
@@ -35,24 +36,6 @@ def load_data(root_folder, fpath_label, batch_size, shuffle=True, num_workers=16
     return loader_
 
 
-def load_state(model, model_path):
-    model_dict = model.state_dict()
-    pretrained_dict = torch.load(model_path, map_location="cpu")["state_dict"]
-    key = list(pretrained_dict.keys())[0]
-    # 1. filter out unnecessary keys
-    # 1.1 multi-GPU ->CPU
-    if (str(key).startswith("module.")):
-        pretrained_dict = {k[7:]: v for k, v in pretrained_dict.items() if
-                           k[7:] in model_dict and v.size() == model_dict[k[7:]].size()}
-    else:
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if
-                           k in model_dict and v.size() == model_dict[k].size()}
-    # 2. overwrite entries in the existing state dict
-    model_dict.update(pretrained_dict)
-    # 3. load the new state dict
-    model.load_state_dict(model_dict)
-
-
 def cycle(iterable):
     while True:
         for x in iterable:
@@ -70,21 +53,21 @@ if __name__ == "__main__":
     hash_length = 48 #48
     margin = 14#14
     num_classes = 101  # 101
-    load_model=False
-    backbone_model_path='/home/disk3/a_zhongzhanhui/PycharmProject/video_retrieval_C3D/checkpoints/UCF101_64bits_20margin_101classes/backbone_0.772471.pth'
-    hashlayer_model_path='/home/disk3/a_zhongzhanhui/PycharmProject/video_retrieval_C3D/checkpoints/UCF101_64bits_20margin_101classes/hashlayer_0.772471.pth'
+    load_model=True
+    load_model_path='/home/disk3/a_zhongzhanhui/PycharmProject/video_retrieval_C3D/checkpoints/UCF101_48bits_14margin_101classes/net_0.294426.pth'
 
     print('===start setting network and optimizer===')
-    backbone = resnet18()
-    load_state(backbone, "./pretrain/resnet-18-kinetics.pth") #加载保存好的模型
-    backbone.to(device)
-    backbone = torch.nn.DataParallel(backbone, device_ids=[0, 1, 2, 3])  # for multi gpu
-    temporal_avg_pool = TemporalAvgPool().to(device) # temporal_max_pool = TemporalMaxPool().to(device)
-    hash_layer = HashLayer(hash_length, num_classes).to(device)
+    net = C3D_Hash_Model(hash_length)
+    net.to(device)
+    net = torch.nn.DataParallel(net, device_ids=[0, 1, 2, 3])  # for multi gpu
+
+    if load_model:
+        net.load_state_dict(torch.load(load_model_path))
+        print('model loaded')
+
     triplet_loss = TripletLoss(margin, device).to(device)
 
-    params = list(backbone.parameters()) + list(hash_layer.parameters())
-    optimizer = torch.optim.SGD(params, lr=learning_rate, momentum=0.9, weight_decay=0.0005)
+    optimizer = torch.optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=0.0005)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size)
     print('===finish setting network and optimizer===')
 
@@ -100,23 +83,11 @@ if __name__ == "__main__":
     train_loader_iter = iter(cycle(train_loader)) #iter(dataloader)返回的是一个迭代器，然后可以使用next访问
     print('===finish setting data loader===')
 
-    backbone.train()
-    hash_layer.train()
+    net.train()
 
     checkpoint_path = './checkpoints/' + 'UCF101_' + str(hash_length) + 'bits_' + str(margin) + 'margin_' + str(
         num_classes) + 'classes'
     os.makedirs(checkpoint_path, exist_ok=True)
-
-    if load_model:
-        backbone.load_state_dict(torch.load(backbone_model_path))
-        hash_layer.load_state_dict(torch.load(hashlayer_model_path))
-
-        if isinstance(backbone, torch.nn.DataParallel):
-            backbone = backbone.module
-        if isinstance(hash_layer, torch.nn.DataParallel):
-            hash_layer = hash_layer.module
-
-
 
     print('===start training===')
     maxMAP=0
@@ -131,11 +102,9 @@ if __name__ == "__main__":
             frames = frames.to(device)  # to gpu if possible
             labels = labels.to(device)  # to gpu if possible
             # print('getting feature')
-            features = backbone(frames)  #shape=[94,512,2]
-            features_avg = temporal_avg_pool(features)  #为毛要用平均池化
-            h, c = hash_layer(features_avg)
+            hash_features = net(frames)
             # print('calculating loss')
-            loss = triplet_loss(h, labels)
+            loss = triplet_loss(hash_features, labels)
             print(f'[epoch{epoch}-batch{i}] loss:{loss:0.4}')
             if loss == 0:
                 continue
@@ -155,8 +124,8 @@ if __name__ == "__main__":
         if epoch % 5 == 0:    #(epoch + 1) % 2 == 0:
             map_start_time=time.time()
             print('getting binary code and label')
-            db_binary, db_label = inference(db_loader, backbone, temporal_avg_pool, hash_layer, hash_length, device)
-            test_binary, test_label = inference(test_loader, backbone, temporal_avg_pool,hash_layer, hash_length, device)
+            db_binary, db_label = inference(db_loader, net, hash_length, device)
+            test_binary, test_label = inference(test_loader, net, hash_length, device)
             print('calculating mAP')
             MAP_ = compute_MAP(db_binary, db_label, test_binary, test_label)
             print("MAP_: %s" % MAP_)
@@ -168,10 +137,8 @@ if __name__ == "__main__":
 
             if MAP_ > maxMAP:
                 maxMAP = MAP_
-                backbone_pth_path = os.path.join(checkpoint_path, f'backbone_{MAP_:04f}.pth')
-                hash_layer_pth_path = os.path.join(checkpoint_path, f'hashlayer_{MAP_:04f}.pth')
-                torch.save(backbone.state_dict(), backbone_pth_path)
-                torch.save(hash_layer.state_dict(), hash_layer_pth_path)
+                save_pth_path = os.path.join(checkpoint_path, f'net_epoch{epoch}_mAP{MAP_:04f}.pth')
+                torch.save(net.state_dict(), save_pth_path)
 
             map_end_time = time.time()
             print('calcualteing mAP used ', map_end_time - map_start_time, 's')

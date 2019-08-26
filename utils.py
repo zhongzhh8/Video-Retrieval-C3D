@@ -23,20 +23,18 @@ def attention_inference(dataloader, backbone, attention, pool, hash_layer, hash_
     # print hashcodes-threshold
     return (np.sign(np.concatenate(hashcodes) - threshold)).astype(np.int8), np.concatenate(labels)
 
-def inference(dataloader, backbone, pool, hash_layer, hash_length, device):
+def inference(dataloader, net, hash_length, device):
     hashcodes = list()
     labels = list()
-    backbone.eval()
-    hash_layer.eval()
+    net.eval()
+    # hash_layer.eval()
     threshold = np.array([0.0] * hash_length)  # 0.5
     with torch.no_grad():
         for imgs, labels_ in tqdm(dataloader):
             labels.append(labels_.view(labels_.size()[0], ).numpy())
             # print('imgs:', imgs.size())
-            features = backbone(imgs.to(device))
-            features_pool = pool(features)
-            h, _ = hash_layer(features_pool)
-            hashcodes.append(h.cpu().numpy())
+            hash_features = net(imgs.to(device))
+            hashcodes.append(hash_features.cpu().numpy())
     # print hashcodes-threshold
     return (np.sign(np.concatenate(hashcodes) - threshold)).astype(np.int8), np.concatenate(labels)
 
