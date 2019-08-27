@@ -9,7 +9,7 @@ from PIL import Image
 
 class CustomDataset(data.Dataset):
 
-    def __init__(self, root_folder, fpath_label, transform=None):  #,num_frames=32  fpath_label.txt: frames_dir video_label
+    def __init__(self, root_folder, fpath_label, transform=None,num_frames=32):  #  fpath_label.txt: frames_dir video_label
 
         f = open(fpath_label)
         l = f.readlines()
@@ -29,7 +29,7 @@ class CustomDataset(data.Dataset):
         self.labels = labels
         self.label_size = len(self.labels)
         self.transform = transform
-        # self.num_frames=num_frames
+        self.num_frames=num_frames
 
 
     def __getitem__(self, index):
@@ -40,11 +40,11 @@ class CustomDataset(data.Dataset):
         l_ = os.listdir(frames_dir)
         l_.sort(key=lambda x: str(x[:-4]))
 
-        frames_length = 32  # self.num_frames
+        frames_length = self.num_frames
 
         l = [l_[int(round(i * len(l_) / float(frames_length)))] for i in range(frames_length)]
 
-        assert len(l) == 32 #self.num_frames
+        assert len(l) == self.num_frames
         frames_array = np.zeros((frames_length, 3, 112, 112), dtype=np.float32)
 
         for i in range(frames_length):

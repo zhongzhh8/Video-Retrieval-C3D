@@ -30,8 +30,8 @@ def load_data(root_folder, fpath_label, batch_size, shuffle=True, num_workers=16
 
     data_ = CustomDataset(root_folder=root_folder,
                           fpath_label=fpath_label,
-                          transform=transform,)
-                        #  num_frames=num_frames)
+                          transform=transform,
+                          num_frames=num_frames)
 
     # torch.utils.data.DataLoader
     loader_ = data.DataLoader(
@@ -51,7 +51,7 @@ def cycle(iterable):
 def get_parser():
     parser = argparse.ArgumentParser(description='train C3DHash')
 
-    parser.add_argument('--dataset_name', default='HMDB', help='HMDB or UCF')
+    parser.add_argument('--dataset_name', default='UCF', help='HMDB or UCF')
     parser.add_argument('--num_frames', type=int, default=32, help='number of frames taken form a video')
     parser.add_argument('--batch_size', type=int, default=120, help='input batch size')
     parser.add_argument('--num_epochs', type=int, default=160, help='number of epochs to train for')
@@ -94,8 +94,8 @@ if __name__ == "__main__":
         root_folder = "/home/disk3/a_zhongzhanhui/data/HMDB-51/HMDB51/"
         train_fpath_label = "/home/disk3/a_zhongzhanhui/data/HMDB-51/TrainTestlist/labels/train1.txt"
         test_fpath_label = "/home/disk3/a_zhongzhanhui/data/HMDB-51/TrainTestlist/labels/test1.txt"
-    train_loader = load_data(root_folder, train_fpath_label, opt.batch_size, shuffle=True, num_workers=16,) #train=False,num_frames=opt.num_frames
-    test_loader = load_data(root_folder, test_fpath_label, opt.batch_size, shuffle= False, num_workers=8,) #train=False,num_frames=opt.num_frames
+    train_loader = load_data(root_folder, train_fpath_label, opt.batch_size, shuffle=True, num_workers=16,train=False,num_frames=opt.num_frames) #
+    test_loader = load_data(root_folder, test_fpath_label, opt.batch_size, shuffle= False, num_workers=8,train=False,num_frames=opt.num_frames) #
     db_loader = train_loader
     train_loader_iter = iter(cycle(train_loader)) #iter(dataloader)返回的是一个迭代器，然后可以使用next访问
     print('===finish setting data loader===')
