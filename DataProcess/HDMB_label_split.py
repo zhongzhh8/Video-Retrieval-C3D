@@ -3,8 +3,8 @@ import os
 
 
 if __name__=='__main__':
-    split_dir_path='/home/disk3/a_zhongzhanhui/data/testTrainMulti_7030_splits'
-    labels_dir_path='/home/disk3/a_zhongzhanhui/data/testTrainMulti_7030_splits/labels'
+    split_dir_path='/home/disk3/a_zhongzhanhui/data/HMDB-51/testTrainMulti_7030_splits'
+    labels_dir_path='/home/disk3/a_zhongzhanhui/data/HMDB-51/testTrainMulti_7030_splits/labels'
     classid=0
     train_file=open(os.path.join(labels_dir_path,'train1.txt'),'w')
     test_file = open(os.path.join(labels_dir_path, 'test1.txt'), 'w')
@@ -25,8 +25,8 @@ if __name__=='__main__':
         trainsample_cnt= 0
         testsample_cnt =0
         for line in txt_file:
-            video_name = line.strip().split()[0].split('.')[0]  # Depending on your fpath_label file
-            # video_name = line.strip().split()[0]
+            # video_name = line.strip().split()[0].split('.')[0]  # Depending on your fpath_label file
+            video_name = line.strip().split()[0]
             split_id = line.strip().split()[1]  # default for single label, while [1:] for single label
             split_id = int(split_id)
             if split_id==1:
