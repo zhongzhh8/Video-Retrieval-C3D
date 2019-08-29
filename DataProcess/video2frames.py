@@ -10,7 +10,7 @@ def video2frames(video, newdir):
     # 29.97/30FPS
     while (cap.isOpened()):
         ret, frame = cap.read()
-        if cnt % 1 == 0:  # 30 FPS
+        if True:#cnt % 1 == 0:  # 30 FPS
             if ret == True:
                 # cv2.imshow("frame",frame)
                 cv2.imwrite(newdir + '/' + str(count).zfill(4) + ".jpg", frame)
@@ -33,14 +33,14 @@ def video2frames(video, newdir):
 # db_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/db1_20.txt'
 
 # ucf101 101
-train_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/train1_101.txt'
-test_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/test1_101.txt'
-db_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/db1_101.txt'
+# train_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/train1_101.txt'
+# test_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/test1_101.txt'
+# db_fpath = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/db1_101.txt'
 
-# # JHMDB
-# train_fpath = '/home/disk1/wangshaoying/my_video_retrieval/JHMDB/txt/train_10_210.txt'
-# test_fpath = '/home/disk1/wangshaoying/my_video_retrieval/JHMDB/txt/test_10_210.txt'
-# db_fpath = '/home/disk1/wangshaoying/my_video_retrieval/JHMDB/txt/db_20_420.txt'
+# JHMDB
+train_fpath = '/home/disk3/a_zhongzhanhui/data/JointHMDB/Label_Split/train_10_210.txt'
+test_fpath = '/home/disk3/a_zhongzhanhui/data/JointHMDB/Label_Split/test_10_210.txt'
+db_fpath = '/home/disk3/a_zhongzhanhui/data/JointHMDB/Label_Split/db_20_420.txt'
 
 
 fpath = [train_fpath, test_fpath]
@@ -52,24 +52,24 @@ for i in range(len(fpath)):
     f.close()
     # th14 dataset
     # root_dir = '/home/disk1/wangshaoying/my_video_retrieval/th14_5FPS/'  # th14
-    # root_dir = '/home/disk1/wangshaoying/my_video_retrieval/JHMDB/frames_30FPS/'  # JHMDB
-    root_dir = '/home/disk1/wangshaoying/data/UCF101/'  # UCF101
+    root_dir = '/home/disk3/a_zhongzhanhui/data/JointHMDB/Frames/'  # JHMDB
+    # root_dir = '/home/disk1/wangshaoying/data/UCF101/'  # UCF101
 
     for item in l:
         # video_dir = '/home/disk1/wangshaoying/my_video_retrieval/th14/'  # th14
-        # video_dir = '/home/disk1/wangshaoying/my_video_retrieval/JHMDB/videos/' # JHMDB
-        video_dir = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/UCF101/' # ucf101
+        video_dir = '/home/disk3/a_zhongzhanhui/data/JointHMDB/JHMDB/' # JHMDB
+        # video_dir = '/home/disk1/wangshaoying/my_video_retrieval/ucf101/UCF101/' # ucf101
 
-        second_dir = root_dir + item.strip().split('/')[0] + '/' #+ item.strip().split('/')[1] + '/' #UCF101
-        # second_dir = root_dir + item.strip().split('/')[1] + '/' # JHMDB
+        # second_dir = root_dir + item.strip().split('/')[0] + '/' #+ item.strip().split('/')[1] + '/' #UCF101
+        second_dir = root_dir + item.strip().split('/')[1] + '/' # JHMDB
         print('second:', second_dir)
         if not os.path.exists(second_dir):
             os.mkdir(second_dir)
 
         video = video_dir + item.strip().split()[0]
         # newdir = os.path.join(root_dir, item.strip().split()[0].split('.')[0])
-        # newdir = os.path.join(second_dir, item.strip().split('/')[2].split()[0].split('.')[0]) # JHMDB
-        newdir = os.path.join(second_dir, item.strip().split('/')[1].split()[0].split('.')[0])
+        newdir = os.path.join(second_dir, item.strip().split('/')[2].split()[0].split('.')[0]) # JHMDB
+        # newdir = os.path.join(second_dir, item.strip().split('/')[1].split()[0].split('.')[0])
         print('newdir:', newdir)
         # if os.path.exists(newdir) == True:
         #     os.system("rm -rf " + newdir)

@@ -51,29 +51,31 @@ def cycle(iterable):
 def get_parser():
     parser = argparse.ArgumentParser(description='train C3DHash')
 
-    parser.add_argument('--dataset_name', default='UCF', help='HMDB or UCF')
-    parser.add_argument('--num_frames', type=int, default=32, help='number of frames taken form a video')
+    parser.add_argument('--dataset_name', default='JHMDB', help='HMDB or UCF or JHMDB')
+    parser.add_argument('--hash_length', type=int, default=48, help='length of hashing binary')
+    parser.add_argument('--margin', type=float, default=14, help='取bit的四分之一多一点，margin影响很大')
+    parser.add_argument('--num_frames', type=int, default=10, help='number of frames taken form a video')
+
+    parser.add_argument('--lr', type=float, default=0.0001, help='lr=0.001')
     parser.add_argument('--batch_size', type=int, default=120, help='input batch size')
     parser.add_argument('--num_epochs', type=int, default=160, help='number of epochs to train for')
     parser.add_argument('--step_lr', type=int, default=40, help='change lr per strp_lr epoch')
-    parser.add_argument('--lr', type=float, default=0.0001, help='lr=0.001')
-    parser.add_argument('--hash_length', type=int, default=48, help='length of hashing binary')
-    parser.add_argument('--margin', type=float, default=14, help='取bit的四分之一多一点，margin影响很大')
+    parser.add_argument('--checkpoint_step', type=int, default=5, help='checkpointing after batches')
+
     parser.add_argument('--load_model', default=False, help='wether load model checkpoints or not')
     parser.add_argument('--load_model_path',default='/home/disk3/a_zhongzhanhui/PycharmProject/video_retrieval_C3D/checkpoints/HMDB_48bits_14margin_/net_epoch50_mAP0.476344.pth',help='location to load model')
-    parser.add_argument('--checkpoint_step', type=int, default=5, help='checkpointing after batches')
 
     return parser
 
 if __name__ == "__main__":
     parser = get_parser()
     opt = parser.parse_args()
-    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")  # device configuration
+    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")  # device configuration
 
     print('===start setting network and optimizer===')
     net = C3D_Hash_Model(opt.hash_length)
     net.to(device)
-    net = torch.nn.DataParallel(net, device_ids=[2,3])  # for multi gpu
+    net = torch.nn.DataParallel(net, device_ids=[1,2,3])  # for multi gpu
 
     if opt.load_model:
         net.load_state_dict(torch.load(opt.load_model_path))
@@ -94,9 +96,21 @@ if __name__ == "__main__":
         root_folder = "/home/disk3/a_zhongzhanhui/data/HMDB-51/HMDB51/"
         train_fpath_label = "/home/disk3/a_zhongzhanhui/data/HMDB-51/TrainTestlist/labels/train1.txt"
         test_fpath_label = "/home/disk3/a_zhongzhanhui/data/HMDB-51/TrainTestlist/labels/test1.txt"
-    train_loader = load_data(root_folder, train_fpath_label, opt.batch_size, shuffle=True, num_workers=16,train=False,num_frames=opt.num_frames) #
-    test_loader = load_data(root_folder, test_fpath_label, opt.batch_size, shuffle= False, num_workers=8,train=False,num_frames=opt.num_frames) #
-    db_loader = train_loader
+    elif opt.dataset_name=='JHMDB':
+        root_folder = "/home/disk3/a_zhongzhanhui/data/JointHMDB/Frames"
+        train_fpath_label = "/home/disk3/a_zhongzhanhui/data/JointHMDB/Label_Split/train_10_210.txt"
+        test_fpath_label = "/home/disk3/a_zhongzhanhui/data/JointHMDB/Label_Split/test_10_210.txt"
+        db_fpath_label='/home/disk3/a_zhongzhanhui/data/JointHMDB/Label_Split/db_20_420.txt'
+    else:
+        print('dataset_name error')
+        exit(0)
+    train_loader = load_data(root_folder, train_fpath_label, opt.batch_size, shuffle=True, num_workers=16,train=False,num_frames=opt.num_frames)
+    test_loader = load_data(root_folder, test_fpath_label, opt.batch_size, shuffle= False, num_workers=8,train=False,num_frames=opt.num_frames)
+    if opt.dataset_name=='UCF' or opt.dataset_name=='HMDB':
+        db_loader = train_loader
+    elif opt.dataset_name=='JHMDB':
+        db_loader=load_data(root_folder, db_fpath_label, opt.batch_size, shuffle=True, num_workers=16,train=False,num_frames=opt.num_frames)
+
     train_loader_iter = iter(cycle(train_loader)) #iter(dataloader)返回的是一个迭代器，然后可以使用next访问
     print('===finish setting data loader===')
 
