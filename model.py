@@ -202,6 +202,17 @@ def resnet101(**kwargs):
     return model
 
 
+class TemporalAvgPool(nn.Module):
+    def __init__(self):
+        super(TemporalAvgPool, self).__init__()
+        self.filter=nn.AdaptiveAvgPool1d(1)
+
+    def forward(self, x):
+        out=self.filter(x)
+        out=torch.squeeze(out)
+        return out
+
+
 class HashLayer(nn.Module):
     def __init__(self,hash_length):
         super(HashLayer, self).__init__()
@@ -240,10 +251,12 @@ class C3D_Hash_Model(nn.Module):
         super(C3D_Hash_Model, self).__init__()
         self.resnet=resnet18()
         load_state(self.resnet, "./pretrain/resnet-18-kinetics.pth")  # 加载保存好的模型
+        self.avgpooling=TemporalAvgPool()
         self.hash_layer =HashLayer(hash_length)
 
     def forward(self, x):
         resnet_feature=self.resnet(x)
-        squeeze_feature=torch.squeeze(resnet_feature)
-        hash_feature = self.hash_layer(squeeze_feature)
+        avgpooling_feature=self.avgpooling(resnet_feature)
+        # squeeze_feature=torch.squeeze(resnet_feature)
+        hash_feature = self.hash_layer(avgpooling_feature)
         return hash_feature
